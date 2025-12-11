@@ -1,0 +1,11 @@
+Scanner consiste en un script en Python que utiliza la librería python-nmap para realizar un escaneo básico de puertos y servicios sobre una dirección IP o un dominio. 
+
+El objetivo del programa es permitir al usuario identificar qué puertos están abiertos, cerrados o filtrados, además de obtener información sobre los servicios que se encuentran ejecutándose en el equipo objetivo.
+El script también genera un archivo llamado resultado_scan.txt, donde se guarda la salida del escaneo en formato CSV para su revisión posterior.
+
+Para que el programa funcione correctamente, es necesario tener instalado Nmap en el sistema operativo. En la mayoría de distribuciones basadas en Linux, como Kali o Ubuntu, 
+basta con instalarlo mediante el comando correspondiente. Además, es necesario instalar la librería python-nmap utilizando pip, ya que esta permite que Python interactúe directamente con Nmap desde el código.
+
+El uso del script es sencillo. Solo es necesario ejecutarlo desde la terminal y escribir la IP o el dominio que se desea escanear cuando el programa lo solicite. Una vez ingresado el objetivo, el script iniciará un 
+escaneo utilizando opciones como -sS para realizar un SYN scan, -sV para detectar versiones de servicios y -Pn para evitar la verificación por ping. Después de completar el análisis, el programa mostrará los puertos 
+detectados y sus estados, y guardará un registro completo en el archivo generado automáticamente.
