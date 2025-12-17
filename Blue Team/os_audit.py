@@ -2,34 +2,50 @@
 import subprocess
 import datetime
 
-report_file = "os_audit_report.txt"
+archivo_reporte = "os_audit_report.txt"
 
-def run_cmd(cmd):
+def ejecutar(comando):
     try:
-        result = subprocess.check_output(cmd, shell=True, text=True)
-        return result.strip()
-    except Exception as e:
-        return f"Error ejecutando {cmd}: {e}"
+        return subprocess.check_output(comando, shell=True, text=True)
+    except:
+        return "No disponible\n"
 
 def main():
-    now = datetime.datetime.now()
-    with open(report_file, "a") as f:
-        f.write("\n============================\n")
-        f.write(f" AUDITORÍA DEL SISTEMA - {now}\n")
-        f.write("============================\n\n")
+    ahora = datetime.datetime.now()
 
-        f.write("== Información del sistema ==\n")
-        f.write(run_cmd("systeminfo") + "\n\n" if subprocess.run("systeminfo", shell=True).returncode == 0 
-                else run_cmd("uname -a") + "\n\n")
+    with open(archivo_reporte, "a") as f:
+        f.write("\nAuditoria del sistema\n")
+        f.write(f"Fecha: {ahora}\n\n")
 
-        f.write("== Procesos corriendo ==\n")
-        f.write(run_cmd("tasklist") + "\n\n" if subprocess.run("tasklist", shell=True).returncode == 0
-                else run_cmd("ps aux") + "\n\n")
+        f.write("Sistema\n")
+        f.write(ejecutar("uname -a") + "\n")
 
-        f.write("== Puertos abiertos ==\n")
-        f.write(run_cmd("netstat -ano") + "\n\n")
+        f.write("Usuarios\n")
+        f.write(ejecutar("cut -d: -f1 /etc/passwd") + "\n")
 
-    print(f"[✔] Auditoría completada. Guardada en {report_file}")
+        f.write("Grupos\n")
+        f.write(ejecutar("cut -d: -f1 /etc/group") + "\n")
+
+        f.write("Ultimos accesos\n")
+        f.write(ejecutar("last -n 5") + "\n")
+
+        f.write("Puertos abiertos\n")
+        f.write(ejecutar("ss -tuln") + "\n")
+
+        f.write("Servicios activos\n")
+        f.write(ejecutar(
+            "systemctl list-units --type=service --state=running | head -n 20"
+        ) + "\n")
+
+        f.write("Configuracion SSH\n")
+        f.write(ejecutar(
+            "grep -E 'Port|PermitRootLogin|PasswordAuthentication' /etc/ssh/sshd_config"
+        ) + "\n")
+
+        f.write("Cron del sistema\n")
+        f.write(ejecutar("cat /etc/crontab") + "\n")
+
+    print("Auditoria finalizada")
 
 if __name__ == "__main__":
     main()
